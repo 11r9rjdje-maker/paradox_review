@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PARADOX — Arc I Review</title>
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle at center, #0f172a, #000000);
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px;
+    color: silver;
+    letter-spacing: 5px;
+}
+
+.blade {
+    width: 4px;
+    height: 120px;
+    background: linear-gradient(to bottom, silver, white);
+    margin: 20px auto;
+    animation: glowBlade 2s infinite alternate;
+}
+
+@keyframes glowBlade {
+    from { box-shadow: 0 0 10px silver; }
+    to { box-shadow: 0 0 30px white; }
+}
+
+input {
+    width: 60px;
+    margin: 5px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    background: silver;
+    border: none;
+    cursor: pointer;
+}
+
+#average, #leaderboard, #comments {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>PARADOX</h1>
+<div class="blade"></div>
+
+<p>Rate Arc I (1–5)</p>
+
+Opening <input type="number" id="r1" min="1" max="5">
+Mystery <input type="number" id="r2" min="1" max="5">
+Emotion <input type="number" id="r3" min="1" max="5">
+World <input type="number" id="r4" min="1" max="5">
+Ending <input type="number" id="r5" min="1" max="5">
+
+<br>
+<button onclick="submitReview()">Submit</button>
+
+<div id="average">Loading average...</div>
+<h3>Leaderboard</h3>
+<div id="leaderboard"></div>
+
+<h3>Comments</h3>
+<input id="commentText" placeholder="Write comment">
+<button onclick="submitComment()">Post</button>
+<div id="comments"></div>
+
+<script>
+const owner = "11r9rjdje-maker";
+const repo = "paradox_review";
+
+async function loadData() {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`);
+    const data = await res.json();
+
+    let total = 0;
+    let count = 0;
+    let leaderboardHTML = "";
+    let commentsHTML = "";
+
+    data.forEach(issue => {
+        if(issue.title.startsWith("Review:")) {
+            let rating = parseFloat(issue.body);
+            total += rating;
+            count++;
+            leaderboardHTML += issue.user.login + " - ★ " + rating + "<br>";
+        }
+        if(issue.title.startsWith("Comment:")) {
+            commentsHTML += issue.user.login + ": " + issue.body + "<br>";
+        }
+    });
+
+    if(count > 0) {
+        let avg = (total/count).toFixed(2);
+        document.getElementById("average").innerHTML =
+            "Live Average: ★ " + avg + " / 5";
+    }
+
+    document.getElementById("leaderboard").innerHTML = leaderboardHTML;
+    document.getElementById("comments").innerHTML = commentsHTML;
+}
+
+async function submitReview() {
+    alert("To submit reviews, enable GitHub Issue creation in repo.");
+}
+
+async function submitComment() {
+    alert("To submit comments, enable GitHub Issue creation in repo.");
+}
+
+loadData();
+</script>
+
+</body>
+</html>

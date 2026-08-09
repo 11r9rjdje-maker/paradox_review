@@ -394,15 +394,16 @@ function updateAuthUI() {
 
     if (currentUser) {
         const name = currentUser.user_metadata?.username || currentUser.email;
+
         status.innerText = "Logged in as: " + name;
-        form.classList.add("hidden");
-        logoutBtn.classList.remove("hidden");
-        ratingCard.classList.remove("hidden");
+        form.style.display = "none";
+        logoutBtn.style.display = "block";
+        ratingCard.style.display = "block";
     } else {
-        status.innerText = "You are not logged in.";
-        form.classList.remove("hidden");
-        logoutBtn.classList.add("hidden");
-        ratingCard.classList.add("hidden");
+        status.innerText = "Login to review";
+        form.style.display = "block";
+        logoutBtn.style.display = "none";
+        ratingCard.style.display = "none";
     }
 }
 
@@ -546,6 +547,14 @@ async function loadAll() {
 }
 
 loadAll();
+
+   client.auth.getSession().then(({ data }) => {
+    if (data.session) {
+        currentUser = data.session.user;
+        updateAuthUI();
+    }
+});
+   
 </script>
 
 </body>

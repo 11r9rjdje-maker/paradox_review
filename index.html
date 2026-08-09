@@ -1,124 +1,317 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>PARADOX — Arc I Review</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARADOX — Arc I Experience</title>
 
 <style>
-body {
+/* ===== GLOBAL ===== */
+
+* {
     margin: 0;
-    background: radial-gradient(circle at center, #0f172a, #000000);
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: url("poster.jpg") center center / cover no-repeat fixed;
     color: white;
-    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));
+    z-index: 1;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    padding: 80px 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+/* ===== TITLE ===== */
+
+.title {
+    font-size: 60px;
     text-align: center;
+    letter-spacing: 8px;
+    color: #e5e7eb;
+    text-shadow: 0 0 25px rgba(255,255,255,0.4);
 }
 
-h1 {
-    font-size: 50px;
-    color: silver;
-    letter-spacing: 5px;
-}
-
-.blade {
-    width: 4px;
-    height: 120px;
-    background: linear-gradient(to bottom, silver, white);
-    margin: 20px auto;
-    animation: glowBlade 2s infinite alternate;
-}
-
-@keyframes glowBlade {
-    from { box-shadow: 0 0 10px silver; }
-    to { box-shadow: 0 0 30px white; }
-}
-
-input {
-    width: 60px;
-    margin: 5px;
+.subtitle {
     text-align: center;
+    margin-top: 10px;
+    color: #9ca3af;
+    letter-spacing: 2px;
 }
+
+/* ===== CARD ===== */
+
+.card {
+    margin-top: 60px;
+    padding: 40px;
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.15);
+}
+
+/* ===== STAR RATING ===== */
+
+.rating-group {
+    margin-bottom: 30px;
+}
+
+.rating-label {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.stars {
+    display: flex;
+    gap: 10px;
+}
+
+.star {
+    font-size: 28px;
+    cursor: pointer;
+    color: #555;
+    transition: 0.2s;
+}
+
+.star.active {
+    color: gold;
+}
+
+/* ===== BUTTON ===== */
 
 button {
-    padding: 10px 20px;
-    background: silver;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 10px;
     border: none;
+    background: silver;
+    color: black;
     cursor: pointer;
+    font-weight: bold;
 }
 
-#average, #leaderboard, #comments {
-    margin-top: 20px;
+button:hover {
+    background: white;
+}
+
+/* ===== SECTIONS ===== */
+
+.section {
+    margin-top: 60px;
+}
+
+.section-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.comment-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+#leaderboard,
+#comments {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ===== FRACTURE EFFECT ===== */
+
+.flash {
+    animation: flashEffect 0.5s ease;
+}
+
+@keyframes flashEffect {
+    0% { background: white; }
+    100% { background: transparent; }
+}
+
+/* ===== ADMIN PANEL ===== */
+
+.admin-panel {
+    display: none;
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>PARADOX</h1>
-<div class="blade"></div>
+<div class="overlay"></div>
 
-<p>Rate Arc I (1–5)</p>
+<div class="container">
 
-Opening <input type="number" id="r1" min="1" max="5">
-Mystery <input type="number" id="r2" min="1" max="5">
-Emotion <input type="number" id="r3" min="1" max="5">
-World <input type="number" id="r4" min="1" max="5">
-Ending <input type="number" id="r5" min="1" max="5">
+<div class="title">PARADOX</div>
+<div class="subtitle">ARC I — THE BOY WHO COULDN’T WIN</div>
 
-<br>
-<button onclick="submitReview()">Submit</button>
+<div class="card" id="reviewCard">
 
-<div id="average">Loading average...</div>
-<h3>Leaderboard</h3>
+<h3>Rate Arc I</h3>
+
+<div id="ratingsContainer"></div>
+
+<button onclick="submitReview()">Submit Review</button>
+
+<div id="average" style="margin-top:20px;"></div>
+
+</div>
+
+<div class="section">
+<div class="section-title">Leaderboard</div>
 <div id="leaderboard"></div>
+</div>
 
-<h3>Comments</h3>
-<input id="commentText" placeholder="Write comment">
+<div class="section">
+<div class="section-title">Comments</div>
+<input id="commentText" class="comment-input" placeholder="Write your thoughts...">
 <button onclick="submitComment()">Post</button>
 <div id="comments"></div>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+<h3>Admin Stats</h3>
+<div id="adminStats"></div>
+</div>
+
+</div>
 
 <script>
-const owner = "11r9rjdje-maker";
-const repo = "paradox_review";
 
-async function loadData() {
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`);
-    const data = await res.json();
+const categories = ["Opening", "Mystery", "Emotion", "Worldbuilding", "Ending"];
+let userRatings = {};
+let allReviews = JSON.parse(localStorage.getItem("paradox_reviews") || "[]");
 
-    let total = 0;
-    let count = 0;
-    let leaderboardHTML = "";
-    let commentsHTML = "";
+const ratingsContainer = document.getElementById("ratingsContainer");
 
-    data.forEach(issue => {
-        if(issue.title.startsWith("Review:")) {
-            let rating = parseFloat(issue.body);
-            total += rating;
-            count++;
-            leaderboardHTML += issue.user.login + " - ★ " + rating + "<br>";
-        }
-        if(issue.title.startsWith("Comment:")) {
-            commentsHTML += issue.user.login + ": " + issue.body + "<br>";
-        }
-    });
+/* Build star UI */
+categories.forEach(cat => {
+    const group = document.createElement("div");
+    group.className = "rating-group";
 
-    if(count > 0) {
-        let avg = (total/count).toFixed(2);
-        document.getElementById("average").innerHTML =
-            "Live Average: ★ " + avg + " / 5";
+    const label = document.createElement("div");
+    label.className = "rating-label";
+    label.innerText = cat;
+
+    const starsDiv = document.createElement("div");
+    starsDiv.className = "stars";
+
+    for(let i=1;i<=5;i++){
+        const star = document.createElement("span");
+        star.innerHTML = "★";
+        star.className = "star";
+        star.onclick = () => setRating(cat, i, starsDiv);
+        starsDiv.appendChild(star);
     }
 
-    document.getElementById("leaderboard").innerHTML = leaderboardHTML;
-    document.getElementById("comments").innerHTML = commentsHTML;
+    group.appendChild(label);
+    group.appendChild(starsDiv);
+    ratingsContainer.appendChild(group);
+});
+
+function setRating(category, value, starsDiv) {
+    userRatings[category] = value;
+    Array.from(starsDiv.children).forEach((star, index) => {
+        star.classList.toggle("active", index < value);
+    });
 }
 
-async function submitReview() {
-    alert("To submit reviews, enable GitHub Issue creation in repo.");
+function submitReview() {
+
+    if(localStorage.getItem("alreadyReviewed")) {
+        alert("You have already reviewed from this device.");
+        return;
+    }
+
+    if(Object.keys(userRatings).length < categories.length){
+        alert("Please rate all categories.");
+        return;
+    }
+
+    const avg = Object.values(userRatings)
+        .reduce((a,b)=>a+b,0) / categories.length;
+
+    allReviews.push(avg);
+    localStorage.setItem("paradox_reviews", JSON.stringify(allReviews));
+    localStorage.setItem("alreadyReviewed", "true");
+
+    updateStats();
+
+    if(avg === 5){
+        document.body.classList.add("flash");
+        setTimeout(()=>document.body.classList.remove("flash"),500);
+    }
 }
 
-async function submitComment() {
-    alert("To submit comments, enable GitHub Issue creation in repo.");
+function updateStats() {
+    if(allReviews.length === 0) return;
+
+    const average = (allReviews.reduce((a,b)=>a+b,0) / allReviews.length).toFixed(2);
+    document.getElementById("average").innerText =
+        "Average Rating: ★ " + average + " / 5";
+
+    document.getElementById("leaderboard").innerHTML =
+        allReviews.map((r,i)=>"Review "+(i+1)+" - ★ "+r).join("<br>");
+
+    document.getElementById("adminStats").innerText =
+        "Total Reviews: "+allReviews.length+"\nAverage: "+average;
 }
 
-loadData();
+function submitComment(){
+    const text = commentText.value.trim();
+    if(!text) return;
+
+    const comments = JSON.parse(localStorage.getItem("paradox_comments")||"[]");
+    comments.push(text);
+    localStorage.setItem("paradox_comments", JSON.stringify(comments));
+
+    commentText.value="";
+    loadComments();
+}
+
+function loadComments(){
+    const comments = JSON.parse(localStorage.getItem("paradox_comments")||"[]");
+    document.getElementById("comments").innerHTML =
+        comments.map(c=>"<div>"+c+"</div>").join("");
+}
+
+/* Admin unlock: press P 3 times */
+let pressCount = 0;
+document.addEventListener("keydown", e=>{
+    if(e.key === "p" || e.key === "P"){
+        pressCount++;
+        if(pressCount===3){
+            document.getElementById("adminPanel").style.display="block";
+        }
+    }
+});
+
+updateStats();
+loadComments();
+
 </script>
 
 </body>

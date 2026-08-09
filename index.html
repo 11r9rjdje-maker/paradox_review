@@ -4,9 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PARADOX — Arc I Experience</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-/* ===== GLOBAL ===== */
+/* ============================================
+   PARADOX — ARC I REVIEW EXPERIENCE
+   ============================================ */
 
 * {
     margin: 0;
@@ -19,143 +22,221 @@ body {
     min-height: 100vh;
     background: url("poster.jpg") center center / cover no-repeat fixed;
     color: white;
-    overflow-x: hidden;
 }
 
+/* Dark cinematic overlay */
 .overlay {
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95));
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0.92));
     z-index: 1;
 }
 
 .container {
     position: relative;
     z-index: 2;
-    padding: 80px 20px;
-    max-width: 800px;
+    max-width: 700px;
     margin: auto;
+    padding: 60px 20px 100px;
 }
 
-/* ===== TITLE ===== */
+/* ---------- TITLE ---------- */
 
 .title {
-    font-size: 60px;
     text-align: center;
-    letter-spacing: 8px;
+    font-size: 52px;
+    letter-spacing: 10px;
     color: #e5e7eb;
-    text-shadow: 0 0 25px rgba(255,255,255,0.4);
+    text-shadow: 0 0 30px rgba(255,255,255,0.4);
 }
 
 .subtitle {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 12px;
     color: #9ca3af;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-size: 14px;
 }
 
-/* ===== CARD ===== */
+/* ---------- CARDS ---------- */
 
 .card {
-    margin-top: 60px;
-    padding: 40px;
-    background: rgba(255,255,255,0.07);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    box-shadow: 0 0 40px rgba(255,255,255,0.15);
+    margin-top: 50px;
+    padding: 35px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(18px);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(255,255,255,0.08);
 }
 
-/* ===== STAR RATING ===== */
-
-.rating-group {
-    margin-bottom: 30px;
+.card h2 {
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    color: #e5e7eb;
 }
 
-.rating-label {
-    margin-bottom: 10px;
-    font-size: 16px;
+/* ---------- AUTH ---------- */
+
+.auth-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    font-size: 15px;
 }
 
-.stars {
+.auth-input::placeholder {
+    color: #6b7280;
+}
+
+.auth-buttons {
     display: flex;
     gap: 10px;
 }
 
+#userStatus {
+    margin-bottom: 15px;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+/* ---------- STAR RATING ---------- */
+
+.rating-group {
+    margin-bottom: 22px;
+}
+
+.rating-label {
+    font-size: 14px;
+    color: #d1d5db;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.stars {
+    display: flex;
+    gap: 8px;
+}
+
 .star {
-    font-size: 28px;
+    font-size: 30px;
     cursor: pointer;
-    color: #555;
+    color: rgba(255,255,255,0.2);
     transition: 0.2s;
 }
 
-.star.active {
-    color: gold;
+.star:hover {
+    transform: scale(1.15);
 }
 
-/* ===== BUTTON ===== */
+.star.active {
+    color: #fbbf24;
+    text-shadow: 0 0 10px rgba(251,191,36,0.6);
+}
+
+/* ---------- BUTTONS ---------- */
 
 button {
-    margin-top: 20px;
-    padding: 12px 30px;
+    padding: 12px 28px;
     border-radius: 10px;
     border: none;
-    background: silver;
+    background: #d1d5db;
     color: black;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: 0.3s;
 }
 
 button:hover {
     background: white;
+    box-shadow: 0 0 20px rgba(255,255,255,0.4);
 }
 
-/* ===== SECTIONS ===== */
-
-.section {
-    margin-top: 60px;
+.delete-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    background: rgba(255,80,80,0.25);
+    color: #fca5a5;
+    border: 1px solid rgba(255,80,80,0.4);
+    margin-left: 10px;
 }
 
-.section-title {
-    font-size: 22px;
-    margin-bottom: 20px;
+.delete-btn:hover {
+    background: rgba(255,80,80,0.5);
+    box-shadow: none;
+}
+
+/* ---------- AVERAGE DISPLAY ---------- */
+
+#averageBox {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 26px;
+    color: #fbbf24;
     letter-spacing: 2px;
+}
+
+#reviewCount {
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    margin-top: 5px;
+}
+
+/* ---------- REVIEW / COMMENT ITEMS ---------- */
+
+.item {
+    padding: 15px;
+    margin-bottom: 12px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 10px;
+    border-left: 3px solid silver;
+}
+
+.item-name {
+    font-weight: bold;
+    color: #e5e7eb;
+    font-size: 14px;
+}
+
+.item-detail {
+    color: #9ca3af;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.item-stars {
+    color: #fbbf24;
+    margin-top: 5px;
 }
 
 .comment-input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
-    border: none;
-    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    margin-bottom: 12px;
 }
 
-#leaderboard,
-#comments {
-    font-size: 14px;
-    line-height: 1.6;
+/* ---------- NOTICE ---------- */
+
+.notice {
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 15px;
 }
 
-/* ===== FRACTURE EFFECT ===== */
+.hidden { display: none; }
 
-.flash {
-    animation: flashEffect 0.5s ease;
-}
-
-@keyframes flashEffect {
-    0% { background: white; }
-    100% { background: transparent; }
-}
-
-/* ===== ADMIN PANEL ===== */
-
-.admin-panel {
-    display: none;
-    margin-top: 40px;
-    padding: 20px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-}
 </style>
 </head>
 
@@ -165,153 +246,306 @@ button:hover {
 
 <div class="container">
 
-<div class="title">PARADOX</div>
-<div class="subtitle">ARC I — THE BOY WHO COULDN’T WIN</div>
+    <div class="title">PARADOX</div>
+    <div class="subtitle">ARC I — THE BOY WHO COULDN'T WIN</div>
 
-<div class="card" id="reviewCard">
+    <!-- ===== AUTH CARD ===== -->
+    <div class="card" id="authCard">
+        <h2>SIGN IN TO REVIEW</h2>
+        <div id="userStatus">You are not logged in.</div>
 
-<h3>Rate Arc I</h3>
+        <div id="authForm">
+            <input class="auth-input" id="username" placeholder="Username (shown with your review)">
+            <input class="auth-input" id="email" type="email" placeholder="Email">
+            <input class="auth-input" id="password" type="password" placeholder="Password (min 6 characters)">
+            <div class="auth-buttons">
+                <button onclick="signUp()">Sign Up</button>
+                <button onclick="signIn()">Log In</button>
+            </div>
+            <div class="notice">First time? Use Sign Up. Check your email to confirm.</div>
+        </div>
 
-<div id="ratingsContainer"></div>
+        <button id="logoutBtn" class="hidden" onclick="signOut()">Log Out</button>
+    </div>
 
-<button onclick="submitReview()">Submit Review</button>
+    <!-- ===== RATING CARD ===== -->
+    <div class="card hidden" id="ratingCard">
+        <h2>RATE ARC I</h2>
+        <div id="ratingsContainer"></div>
+        <button onclick="submitReview()">Submit Review</button>
+        <div class="notice">One review per account.</div>
+    </div>
 
-<div id="average" style="margin-top:20px;"></div>
+    <!-- ===== AVERAGE ===== -->
+    <div class="card">
+        <h2>LIVE RATING</h2>
+        <div id="averageBox">—</div>
+        <div id="reviewCount"></div>
+    </div>
 
-</div>
+    <!-- ===== REVIEWS LIST ===== -->
+    <div class="card">
+        <h2>REVIEWS</h2>
+        <div id="reviewsList">Loading...</div>
+    </div>
 
-<div class="section">
-<div class="section-title">Leaderboard</div>
-<div id="leaderboard"></div>
-</div>
-
-<div class="section">
-<div class="section-title">Comments</div>
-<input id="commentText" class="comment-input" placeholder="Write your thoughts...">
-<button onclick="submitComment()">Post</button>
-<div id="comments"></div>
-</div>
-
-<div class="admin-panel" id="adminPanel">
-<h3>Admin Stats</h3>
-<div id="adminStats"></div>
-</div>
+    <!-- ===== COMMENTS ===== -->
+    <div class="card">
+        <h2>COMMENTS</h2>
+        <div id="commentSection">
+            <input class="comment-input" id="commentText" placeholder="Share your thoughts...">
+            <button onclick="submitComment()">Post Comment</button>
+        </div>
+        <div id="commentsList" style="margin-top:20px;">Loading...</div>
+    </div>
 
 </div>
 
 <script>
+/* ============================================
+   CONFIG — EDIT ONLY THESE 3 LINES
+   ============================================ */
+const SUPABASE_URL = "https://kzxakyyraqtqvbxplsav.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable___MuSMTbyfa8pJKxSqFcng_XJEkwUNO";
+const ADMIN_EMAIL = "khatrisoham00@gmail.com";
+/* ============================================ */
+
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const categories = ["Opening", "Mystery", "Emotion", "Worldbuilding", "Ending"];
 let userRatings = {};
-let allReviews = JSON.parse(localStorage.getItem("paradox_reviews") || "[]");
+let currentUser = null;
+
+/* ---------- BUILD STAR UI ---------- */
 
 const ratingsContainer = document.getElementById("ratingsContainer");
 
-/* Build star UI */
 categories.forEach(cat => {
     const group = document.createElement("div");
     group.className = "rating-group";
-
-    const label = document.createElement("div");
-    label.className = "rating-label";
-    label.innerText = cat;
+    group.innerHTML = `<div class="rating-label">${cat}</div>`;
 
     const starsDiv = document.createElement("div");
     starsDiv.className = "stars";
 
-    for(let i=1;i<=5;i++){
+    for (let i = 1; i <= 5; i++) {
         const star = document.createElement("span");
-        star.innerHTML = "★";
         star.className = "star";
+        star.innerHTML = "★";
         star.onclick = () => setRating(cat, i, starsDiv);
         starsDiv.appendChild(star);
     }
 
-    group.appendChild(label);
     group.appendChild(starsDiv);
     ratingsContainer.appendChild(group);
 });
 
-function setRating(category, value, starsDiv) {
-    userRatings[category] = value;
-    Array.from(starsDiv.children).forEach((star, index) => {
-        star.classList.toggle("active", index < value);
+function setRating(cat, value, starsDiv) {
+    userRatings[cat] = value;
+    Array.from(starsDiv.children).forEach((s, i) => {
+        s.classList.toggle("active", i < value);
     });
 }
 
-function submitReview() {
+/* ---------- AUTH ---------- */
 
-    if(localStorage.getItem("alreadyReviewed")) {
-        alert("You have already reviewed from this device.");
+async function signUp() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value;
+
+    if (!username || !email || !password) {
+        alert("Fill all fields.");
         return;
     }
 
-    if(Object.keys(userRatings).length < categories.length){
-        alert("Please rate all categories.");
-        return;
-    }
+    const { error } = await client.auth.signUp({
+        email, password,
+        options: { data: { username } }
+    });
 
-    const avg = Object.values(userRatings)
-        .reduce((a,b)=>a+b,0) / categories.length;
-
-    allReviews.push(avg);
-    localStorage.setItem("paradox_reviews", JSON.stringify(allReviews));
-    localStorage.setItem("alreadyReviewed", "true");
-
-    updateStats();
-
-    if(avg === 5){
-        document.body.classList.add("flash");
-        setTimeout(()=>document.body.classList.remove("flash"),500);
-    }
+    if (error) alert(error.message);
+    else alert("Account created! Check your email to confirm, then log in.");
 }
 
-function updateStats() {
-    if(allReviews.length === 0) return;
+async function signIn() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    const average = (allReviews.reduce((a,b)=>a+b,0) / allReviews.length).toFixed(2);
-    document.getElementById("average").innerText =
-        "Average Rating: ★ " + average + " / 5";
-
-    document.getElementById("leaderboard").innerHTML =
-        allReviews.map((r,i)=>"Review "+(i+1)+" - ★ "+r).join("<br>");
-
-    document.getElementById("adminStats").innerText =
-        "Total Reviews: "+allReviews.length+"\nAverage: "+average;
+    const { error } = await client.auth.signInWithPassword({ email, password });
+    if (error) alert(error.message);
 }
 
-function submitComment(){
-    const text = commentText.value.trim();
-    if(!text) return;
-
-    const comments = JSON.parse(localStorage.getItem("paradox_comments")||"[]");
-    comments.push(text);
-    localStorage.setItem("paradox_comments", JSON.stringify(comments));
-
-    commentText.value="";
-    loadComments();
+async function signOut() {
+    await client.auth.signOut();
 }
 
-function loadComments(){
-    const comments = JSON.parse(localStorage.getItem("paradox_comments")||"[]");
-    document.getElementById("comments").innerHTML =
-        comments.map(c=>"<div>"+c+"</div>").join("");
-}
-
-/* Admin unlock: press P 3 times */
-let pressCount = 0;
-document.addEventListener("keydown", e=>{
-    if(e.key === "p" || e.key === "P"){
-        pressCount++;
-        if(pressCount===3){
-            document.getElementById("adminPanel").style.display="block";
-        }
-    }
+client.auth.onAuthStateChange((event, session) => {
+    currentUser = session?.user || null;
+    updateAuthUI();
+    loadAll();
 });
 
-updateStats();
-loadComments();
+function updateAuthUI() {
+    const status = document.getElementById("userStatus");
+    const form = document.getElementById("authForm");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const ratingCard = document.getElementById("ratingCard");
 
+    if (currentUser) {
+        const name = currentUser.user_metadata?.username || currentUser.email;
+        status.innerText = "Logged in as: " + name;
+        form.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+        ratingCard.classList.remove("hidden");
+    } else {
+        status.innerText = "You are not logged in.";
+        form.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+        ratingCard.classList.add("hidden");
+    }
+}
+
+/* ---------- SUBMIT REVIEW ---------- */
+
+async function submitReview() {
+    if (!currentUser) {
+        alert("Log in first.");
+        return;
+    }
+
+    if (Object.keys(userRatings).length < categories.length) {
+        alert("Rate all 5 categories.");
+        return;
+    }
+
+    // Anti-spam: check if this user already reviewed
+    const { data: existing } = await client
+        .from("reviews")
+        .select("id")
+        .eq("user_id", currentUser.id);
+
+    if (existing && existing.length > 0) {
+        alert("You have already submitted a review.");
+        return;
+    }
+
+    const values = Object.values(userRatings);
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    const username = currentUser.user_metadata?.username || currentUser.email;
+
+    const { error } = await client.from("reviews").insert({
+        user_id: currentUser.id,
+        username: username,
+        opening: userRatings["Opening"],
+        mystery: userRatings["Mystery"],
+        emotion: userRatings["Emotion"],
+        world: userRatings["Worldbuilding"],
+        ending: userRatings["Ending"],
+        average: avg
+    });
+
+    if (error) alert(error.message);
+    else {
+        alert("Review submitted!");
+        loadAll();
+    }
+}
+
+/* ---------- COMMENTS ---------- */
+
+async function submitComment() {
+    if (!currentUser) {
+        alert("Log in to comment.");
+        return;
+    }
+
+    const text = document.getElementById("commentText").value.trim();
+    if (!text) return;
+
+    const username = currentUser.user_metadata?.username || currentUser.email;
+
+    const { error } = await client.from("comments").insert({
+        user_id: currentUser.id,
+        username: username,
+        text: text
+    });
+
+    if (error) alert(error.message);
+    else {
+        document.getElementById("commentText").value = "";
+        loadAll();
+    }
+}
+
+/* ---------- DELETE (ADMIN ONLY) ---------- */
+
+async function deleteReview(id) {
+    if (!confirm("Delete this review?")) return;
+    await client.from("reviews").delete().eq("id", id);
+    loadAll();
+}
+
+async function deleteComment(id) {
+    if (!confirm("Delete this comment?")) return;
+    await client.from("comments").delete().eq("id", id);
+    loadAll();
+}
+
+/* ---------- LOAD DATA ---------- */
+
+async function loadAll() {
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+
+    // Reviews
+    const { data: reviews } = await client
+        .from("reviews")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (reviews && reviews.length > 0) {
+        const totalAvg = (reviews.reduce((a, r) => a + r.average, 0) / reviews.length).toFixed(2);
+        document.getElementById("averageBox").innerText = "★ " + totalAvg + " / 5";
+        document.getElementById("reviewCount").innerText = reviews.length + " review(s)";
+
+        document.getElementById("reviewsList").innerHTML = reviews.map(r => `
+            <div class="item">
+                <div class="item-name">${r.username}
+                    ${isAdmin ? `<button class="delete-btn" onclick="deleteReview('${r.id}')">DELETE</button>` : ""}
+                </div>
+                <div class="item-stars">★ ${r.average.toFixed(1)}</div>
+                <div class="item-detail">
+                    Opening ${r.opening} · Mystery ${r.mystery} · Emotion ${r.emotion} · World ${r.world} · Ending ${r.ending}
+                </div>
+            </div>
+        `).join("");
+    } else {
+        document.getElementById("averageBox").innerText = "—";
+        document.getElementById("reviewCount").innerText = "No reviews yet";
+        document.getElementById("reviewsList").innerHTML = "Be the first to review.";
+    }
+
+    // Comments
+    const { data: comments } = await client
+        .from("comments")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (comments && comments.length > 0) {
+        document.getElementById("commentsList").innerHTML = comments.map(c => `
+            <div class="item">
+                <div class="item-name">${c.username}
+                    ${isAdmin ? `<button class="delete-btn" onclick="deleteComment('${c.id}')">DELETE</button>` : ""}
+                </div>
+                <div class="item-detail">${c.text}</div>
+            </div>
+        `).join("");
+    } else {
+        document.getElementById("commentsList").innerHTML = "No comments yet.";
+    }
+}
+
+loadAll();
 </script>
 
 </body>
